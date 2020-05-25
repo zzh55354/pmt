@@ -1,9 +1,10 @@
 package com.pmt.mattress.rest;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -12,13 +13,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.pmt.mattress.Layer;
 import com.pmt.mattress.Mattress;
 
 /**
  * Root resource (exposed at "Mattress" path)
  */
-@Path("Mattress")
+@Path("Mattresses")
 public class MattressResource {
 
     /**
@@ -41,22 +41,31 @@ public class MattressResource {
     	return Mattress.getAllMattresses();
     }
     
-   /* @PUT
-    @Path("/{mattressId}")
+    @POST
+    @Path("/{mattressId}/layers")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Mattress addLayer(@PathParam("mattressId"),String Name) {
-    	return (Mattress.c);
-    }*/
+    public Mattress addLayer(@PathParam("mattressId") int mId, int lId) {//take mattress object
+    	Mattress.addLayer(mId, lId);
+    	return Mattress.getMattress(mId);
+    }
     
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public  Mattress createMattress(Mattress m) {
-  
-    	return Mattress.createMattress(m.getName2());
-    	
+    public  Mattress createMattress(Mattress m) {//take mattress object
+    	 Mattress.createMattress(m);
+    	 return Mattress.getMattress(m.getID());
+    }
+    
+    @DELETE
+    @Path("/{mattressId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Mattress deleteMattress(@PathParam("mattressId") int mId) {
+    	Mattress m = Mattress.getMattress(mId);
+    	Mattress.deleteMattress(mId);
+    	return m;
     }
     
 }

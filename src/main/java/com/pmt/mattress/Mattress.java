@@ -3,79 +3,139 @@ package com.pmt.mattress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+
 
 public class Mattress {
-	
 	private String name;
 	private int id;
-	private double height = 0.0;
-	private ArrayList <Layer> Layers = new ArrayList<Layer>();
+	private double height;
+	private Double priceTwin; 
+	private Double priceTxl;
+	private Double priceFull;
+	private Double priceQueen;
+	private Double priceKing;
+	private Double priceCking;
+
+	private ArrayList <Layer> Layers;
 	private OuterCover outerCover = null;
-	private HashMap <MattressSize, Double> MattressPrice = new HashMap<MattressSize, Double>();
 	
 	public Mattress() {
-		MattressPriceInit();
+
 	}
 	
-	public static Mattress createMattress(String n) {
-		Mattress m = new Mattress();
+	public static void createMattress(Mattress m) {
 		DBAccess dba = new DBAccess();
-		m.setName2(n);
-		m.setID(dba.sendMattressID(m.getName2()));
-		return m;
+		dba.DBA_init();
+		dba.createMattress(m);
+	}
+	
+	public static void addLayer(int mId, int lId) {
+		DBAccess dba = new DBAccess();
+		dba.DBA_init();
+		dba.addLayer(mId,lId);
 	}
 	
 	public static List<Mattress> getAllMattresses() {
 		ArrayList<Mattress> mattressList = new ArrayList<Mattress>();
 		DBAccess dba = new DBAccess();
-		//dba.init();
+		dba.DBA_init();
 		mattressList = dba.getAllMattresses();
 		return mattressList;
 	}
 	
 	public static Mattress getMattress(int id) {
 		DBAccess dba = new DBAccess();
+		dba.DBA_init();
 		return (dba.getMattress(id));
 	}
-	public static void delectMattress(String n) {
+	
+	public static void deleteMattress(int id) {
 		DBAccess dba = new DBAccess();
-		dba.deleteMattress(n);
+		dba.DBA_init();
+		dba.deleteMattress(id);
 	}
 	
-	public void setName2(String name) {
+	public void setName(String name) {
 		this.name = name;
+	}
+	public String getName() {
+		return name;
 	}
 	
 	public void setID(int id) {
 		this.id = id;
 	}
-	
 	public int getID() {
 		return id;
 	}
 	
-	public void MattressPriceInit() {
-		MattressPrice.put(MattressSize.TWIN, 0.0);
-		MattressPrice.put(MattressSize.TWINXL, 0.0);
-		MattressPrice.put(MattressSize.FULL, 0.0);
-		MattressPrice.put(MattressSize.QUEEN, 0.0);
-		MattressPrice.put(MattressSize.KING, 0.0);
-		MattressPrice.put(MattressSize.CKING, 0.0);
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	public double getHeight() {
+		return height;
 	}
 	
-
-	
-	
-	public String getName2() {
-		return name;
+	public void setPriceTwin(Double price) {
+		priceTwin = price;
 	}
-		
+	public double getPriceTwin() {
+		return priceTwin;
+	}
+	
+	public void setPriceTxl(Double price) {
+		priceTxl = price;
+	}
+	public double getPriceTxl() {
+		return priceTxl;
+	}
+	
+	public void setPriceFull(Double price) {
+		priceFull = price;
+	}
+	public double getPriceFull() {
+		return priceFull;
+	}
+	
+	public void setPriceQueen(Double price) {
+		priceQueen = price;
+	}
+	public double getPriceQueen() {
+		return priceQueen;
+	}
+	
+	public void setPriceKing(Double price) {
+		priceKing = price;
+	}
+	public double getPriceKing() {
+		return priceKing;
+	}
+	
+	public void setPriceCking(Double price) {
+		priceCking = price;
+	}
+	public double getPriceCking() {
+		return priceCking;
+	}
+	
+	public void setOuterCover(OuterCover oc) {
+		outerCover = oc; 
+	}
+	public OuterCover getOuterCover() {
+		return outerCover;
+	}
+	
+	public void setLayers(ArrayList<Layer> Layers) {
+		this.Layers = Layers;
+	}
+	public ArrayList <Layer> getLayers() {
+		return Layers;
+	}
+	
 	public void addLayer(Layer l ) {
 		this.Layers.add(l);
 		height += l.getThickness();
 	}
-	
 	public void removeLayer(Layer l) {
 		boolean removeStatus = Layers.remove(l);
 		if (removeStatus) {
@@ -85,60 +145,6 @@ public class Mattress {
 		}
 	}
 	
-	public double getHeight() {
-		return height;
-	}
-	
-	public void setHeight() {
-		
-	}
-	
-	public void printLayers() {
-		for(int i = 0; i < Layers.size(); i++) {
-			System.out.println(Layers.get(i).toString());
-		}
-	}
-	
-	public void addOuterCover(OuterCover OC) {
-		outerCover = OC;
-	}
 	
 	
-	
-	public void putMattressPrice() {
-		for(int counter = 0; counter < Layers.size(); counter++) {
-			MattressPrice.put(MattressSize.TWIN, MattressPrice.get(MattressSize.TWIN)+Layers.get(counter).getPrice().get(MattressSize.TWIN));
-			MattressPrice.put(MattressSize.TWINXL, MattressPrice.get(MattressSize.TWINXL)+Layers.get(counter).getPrice().get(MattressSize.TWINXL));
-			MattressPrice.put(MattressSize.FULL, MattressPrice.get(MattressSize.FULL)+Layers.get(counter).getPrice().get(MattressSize.FULL));
-			MattressPrice.put(MattressSize.QUEEN, MattressPrice.get(MattressSize.QUEEN)+Layers.get(counter).getPrice().get(MattressSize.QUEEN));
-			MattressPrice.put(MattressSize.KING, MattressPrice.get(MattressSize.KING)+Layers.get(counter).getPrice().get(MattressSize.KING));
-			MattressPrice.put(MattressSize.CKING, MattressPrice.get(MattressSize.CKING)+Layers.get(counter).getPrice().get(MattressSize.CKING));
-		}
-		MattressPrice.put(MattressSize.TWIN, MattressPrice.get(MattressSize.TWIN)+outerCover.getCoverPrice().get(MattressSize.TWIN));
-		MattressPrice.put(MattressSize.TWINXL, MattressPrice.get(MattressSize.TWINXL)+outerCover.getCoverPrice().get(MattressSize.TWINXL));
-		MattressPrice.put(MattressSize.FULL, MattressPrice.get(MattressSize.FULL)+outerCover.getCoverPrice().get(MattressSize.FULL));
-		MattressPrice.put(MattressSize.QUEEN, MattressPrice.get(MattressSize.QUEEN)+outerCover.getCoverPrice().get(MattressSize.QUEEN));
-		MattressPrice.put(MattressSize.KING, MattressPrice.get(MattressSize.KING)+outerCover.getCoverPrice().get(MattressSize.KING));
-		MattressPrice.put(MattressSize.CKING, MattressPrice.get(MattressSize.CKING)+outerCover.getCoverPrice().get(MattressSize.CKING));
-	}
-	public void showPrice() {
-		for(Entry<MattressSize, Double> entry : MattressPrice.entrySet()) {
-			System.out.println(entry.getKey() + ": " + entry.getValue());// api dont print out
-		}
-	}
-	
-	public void savePrice() {
-		DBAccess dba = new DBAccess();
-		dba.saveMattressPrice(MattressPrice);
-	}
-
-	/*public static Mattress addLayerToMattress(int id, Layer l) {
-		Mattress m = new Mattress();
-		DBAccess dba = new DBAccess();
-		m = dba.addLayer(id, l);
-		return m;
-	}*/
-
-	
-
 }
